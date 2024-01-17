@@ -42,6 +42,7 @@ def lambda_handler(event, context):
         mlflow.log_metric("mae", mae)
         run_name = mlflow.active_run().info.run_name
         run_id = mlflow.active_run().info.run_id
+        run_artifact_uri = mlflow.active_run().info.artifact_uri
 
     return {'statusCode': 200,
             'body': "you have just used Mlflow with lambda",
@@ -49,9 +50,11 @@ def lambda_handler(event, context):
             'experiment_id': experiment_id,
             'run_name': run_name,
             'run_id': run_id,
+            'run_artifacts_uri': run_artifact_uri,
             'alpha': alpha,
             'l1_ratio': l1_ratio,
             'rmse': rmse,
             'r2': r2,
             'mae': mae}
+
 
