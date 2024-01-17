@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import mlflow
 
@@ -12,7 +14,7 @@ def lambda_handler(event, context):
 
     # set remote URL of AWS (if required)
     if save_in_remote:
-        remote_server_uri = "http://ec2-13-53-187-91.eu-north-1.compute.amazonaws.com:5000/"
+        remote_server_uri = os.environ['remote_server_uri']
         mlflow.set_tracking_uri(remote_server_uri)
 
     # set experiment name, create and set it. experiment's ID would be set automatically
