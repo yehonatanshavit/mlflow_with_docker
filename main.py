@@ -4,8 +4,6 @@ import numpy as np
 import boto3
 import json
 
-input_s3Client = boto3.client('s3')
-
 
 def run_mlflow_code():
     """
@@ -43,27 +41,29 @@ def run_mlflow_code():
 
 
 def lambda_handler(event, context):
-
-    # bucket info
-    bucket_name = event['Records'][0]['s3']['bucket']['name']
-    bucket_key = event['Records'][0]['s3']['object']['key']
-
+    # Create an S3 client
+    s3 = boto3.client('s3',
+                      aws_access_key_id=os.environ['aws_access_key_id'],
+                      aws_secret_access_key=os.environ['aws_secret_access_key'])
     try:
-        # Download the JSON file from S3
-        s3_client = boto3.client('s3')
-        response = s3_client.get_object(Bucket=bucket_name, Key=bucket_key)
+        response = s3.get_object(Bucket=event['Records'][0]['s3']['bucket']['name'],
+                                 Key=event['Records'][0]['s3']['object']['key'])
         json_content = response['Body'].read().decode('utf-8')
+
+        # Parse the JSON content
         json_data = json.loads(json_content)
-    except:
-        json_data = {}
+
+        # Your logic to process the JSON data goes here
+        s3_output = json_data
+
+    except Exception as e:
+        s3_output = e
 
     # mlflow code
     experiment_id, experiment_name, run_name, run_id = run_mlflow_code()
 
     return {
-        "bucket_name": bucket_name,
-        "bucket_key": bucket_key,
-        "s3_input": json_data,
+        "s3": s3_output,
         "experiment_id": experiment_id,
         "experiment_name": experiment_name,
         "run_name": run_name,
