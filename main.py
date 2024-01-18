@@ -48,11 +48,11 @@ def lambda_handler(event, context):
     bucket_name = event['Records'][0]['s3']['bucket']['name']
     bucket_key = event['Records'][0]['s3']['object']['key']
 
-    # Download the JSON file from S3
-    s3_client = boto3.client('s3')
-    response = s3_client.get_object(Bucket=bucket_name, Key=bucket_key)
-    json_content = response['Body'].read().decode('utf-8')
     try:
+        # Download the JSON file from S3
+        s3_client = boto3.client('s3')
+        response = s3_client.get_object(Bucket=bucket_name, Key=bucket_key)
+        json_content = response['Body'].read().decode('utf-8')
         json_data = json.loads(json_content)
     except:
         json_data = {}
