@@ -6,5 +6,5 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 # run example
-COPY full_code.py ./
-CMD ["full_code.lambda_handler"]
+COPY main.py ./
+CMD ["main.lambda_handler"]

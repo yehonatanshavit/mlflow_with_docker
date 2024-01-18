@@ -1,0 +1,1 @@
+This code runs a simple example of mlflow as AWS lambda function. This code can also be used as a docker container. the main current (18/01/24) usage, do not delete.
